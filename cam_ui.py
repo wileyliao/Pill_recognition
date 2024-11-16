@@ -1,13 +1,16 @@
 import cv2
 import os
 import time
+from datetime import datetime
 import tkinter as tk
 from tkinter import Label, Button, Text, Scrollbar
 from PIL import Image, ImageTk
 import sys
 
+rtsp_url_4k = "rtsp://wiley:82822040@192.168.5.215:554/profile1"
+
 class CameraApp:
-    def __init__(self, root, display_size=(320, 240)):
+    def __init__(self, root, display_size=(1280, 720)):
         self.root = root
         self.root.title("Camera App")
         self.display_size = display_size  # 顯示的縮小尺寸
@@ -18,7 +21,7 @@ class CameraApp:
             os.makedirs(self.save_dir)
 
         # 開啟攝影機 (0 代表預設攝影機)
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(rtsp_url_4k)
         if not self.cap.isOpened():
             self.log("無法開啟攝影機")
             exit()
@@ -50,8 +53,20 @@ class CameraApp:
             self.log("無法讀取影像")
             return
 
-        # 畫出框 (綠色邊框，粗細為2)
-        cv2.rectangle(frame, (250, 100), (450, 250), (0, 255, 0), 2)
+        # 原圖尺寸
+        original_width, original_height = 3840, 2160
+        display_width, display_height = self.display_size
+        # [(343, 6), (969, 706)]
+        # 計算框在原圖上的位置
+        display_x1, display_y1 = 320, 40
+        display_x2, display_y2 = 960, 680
+        x1 = int(display_x1 * (original_width / display_width))
+        y1 = int(display_y1 * (original_height / display_height))
+        x2 = int(display_x2 * (original_width / display_width))
+        y2 = int(display_y2 * (original_height / display_height))
+
+        # 畫出框（確認框位置）
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
         # 將 OpenCV 影像轉換為 PIL 影像，並縮小尺寸顯示
         cv2_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -71,11 +86,16 @@ class CameraApp:
             self.log("無法讀取影像")
             return
 
+        # 調整框的座標至原圖大小
+        ratio = 3
+        x1, y1 = int(320 * ratio), int(40 * ratio)
+        x2, y2 = int(960 * ratio), int(680 * ratio)
+
         # 儲存影像（保持原始尺寸）
-        formatted_time = time.strftime("%Y-%m-%d_%H_%M_%S", time.localtime())
+        formatted_time = datetime.now().strftime("%Y-%m-%d_%H_%M_%S_%f")[:-3]  # 截取到毫秒
         filename = fr"{self.save_dir}/{formatted_time}.png"
         cv2.imwrite(filename, frame)
-        cv2.imwrite(fr"{self.save_dir}/{formatted_time}_test.png", frame[100:250, 250:450])
+        cv2.imwrite(fr"{self.save_dir}/{formatted_time}_test.png", frame[y1:y2, x1:x2])
         self.log(f"已儲存: {filename}")
 
     def quit(self):
@@ -100,8 +120,9 @@ class TextRedirector:
     def flush(self):
         pass  # 實現需要的 flush 方法
 
+
 # 啟動應用程式
 if __name__ == "__main__":
     root = tk.Tk()
-    app = CameraApp(root, display_size=(800, 600))  # 調整顯示的視窗大小
+    app = CameraApp(root, display_size=(1280, 720))  # 調整顯示的視窗大小
     root.mainloop()

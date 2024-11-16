@@ -1,8 +1,14 @@
 import cv2
 
+
+rtsp_url = "rtsp://wiley:82822040@192.168.5.215:554/profile2"
+
+
 class RectangleDrawer:
-    def __init__(self, video_source=0):
+    def __init__(self, video_source = rtsp_url):
         self.cap = cv2.VideoCapture(video_source)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
         self.rect = []
         self.drawing = False
 
