@@ -8,11 +8,15 @@ def encode_image_to_base64(image_path):
         b64_string = base64.b64encode(image_file.read()).decode("utf-8")
     return f"data:image/jpeg;base64,{b64_string}"
 
+
+with open("config.json", "r", encoding="utf-8") as file:
+    config_file = json.load(file)
+
 # 設定要傳送的 API URL
-url = "http://localhost:3050/Pill_recognition"  # 替換為您的 API URL
+url = config_file.get("test_url")  # 替換為您的 API URL
 
 # 編碼圖片並建立請求資料格式
-image_path = r"./captured_images/C_Confuse_A_019.jpg"  # 替換為您的圖片路徑
+image_path = config_file.get("test_image")
 base64_string = encode_image_to_base64(image_path)
 
 payload = {
@@ -21,7 +25,7 @@ payload = {
             "base64": base64_string
         }
     ],
-    # "Value": "True"
+    "Value": "True"
 }
 
 # 設定請求標頭

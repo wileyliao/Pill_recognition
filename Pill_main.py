@@ -5,12 +5,10 @@ from ultralytics import YOLO
 from collections import defaultdict
 
 
-# 初始化 YOLO 模型
-model = YOLO(r"C:\python\pytorch\Pill_recognition\exp_05.pt")
-# 取得類別名稱對應表
-class_names = model.names
+def pill_recognition_main(image, model):
+    # 取得類別名稱對應表
+    class_names = model.names
 
-def pill_recognition_main(image):
     start_time = time.time()
     # 調整圖片大小至模型所需的 640x640
     img_rsz = cv2.resize(image, (640, 640))

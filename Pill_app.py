@@ -1,13 +1,20 @@
+import json
+
 from flask import Flask, request, jsonify
 from Pill_base64_utils import *
 from Pill_main import pill_recognition_main
+from ultralytics import YOLO
 from datetime import datetime
 import threading
 import cv2
 import os
 
 
-def save_image(time, image, subdir="client_capture"):
+with open("config.json", "r", encoding="utf-8") as file:
+    config_file = json.load(file)
+
+
+def save_image(time, image, subdir):
     # 確保子目錄存在
     os.makedirs(subdir, exist_ok=True)
     # 生成檔案名稱並保存影像
@@ -19,6 +26,10 @@ app = Flask(__name__)
 
 prefix = "data:image/jpeg;base64,"
 
+model = YOLO(config_file.get("model_path"))
+
+image_save_path = config_file.get("client_capture")
+
 @app.route('/Pill_recognition', methods=['POST'])
 def main():
     try:
@@ -27,13 +38,13 @@ def main():
 
         if request.json.get('Value'):
             op_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-            save_image_thread = threading.Thread(target=save_image, args=(op_time, image,))
+            save_image_thread = threading.Thread(target=save_image, args=(op_time, image, image_save_path))
             save_image_thread.start()
             check = f'file_name: {op_time}'
         else:
             check = ""
 
-        result, exe_time = pill_recognition_main(image)
+        result, exe_time = pill_recognition_main(image, model)
 
         response_data = {
             'Data': result,
