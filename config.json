@@ -1,0 +1,6 @@
+{
+    "model_path": "C:\\python\\pytorch\\Pill_recognition\\exp_05.pt",
+    "client_capture": "C:\\python\\pytorch\\Pill_recognition\\client_capture",
+    "test_url": "http://localhost:3050/Pill_recognition",
+    "test_image": "C:\\python\\pytorch\\Pill_recognition\\captured_images\\C_Confuse_A_019.jpg"
+}
