@@ -9,7 +9,7 @@ def encode_image_to_base64(image_path):
     return f"data:image/jpeg;base64,{b64_string}"
 
 # 設定要傳送的 API URL
-url = "http://localhost:3000/Pill_recognition"  # 替換為您的 API URL
+url = "http://localhost:3050/Pill_recognition"  # 替換為您的 API URL
 
 # 編碼圖片並建立請求資料格式
 image_path = r"./captured_images/C_Confuse_A_019.jpg"  # 替換為您的圖片路徑
@@ -20,7 +20,8 @@ payload = {
         {
             "base64": base64_string
         }
-    ]
+    ],
+    # "Value": "True"
 }
 
 # 設定請求標頭
