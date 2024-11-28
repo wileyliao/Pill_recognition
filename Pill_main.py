@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 # 初始化 YOLO 模型
-model = YOLO(r"C:\python\pytorch\Pill_recognition\pill_recognition\exp_02\weights\best.pt")
+model = YOLO(r"C:\Projects\upload\Pill_recognition\pill_recognition\exp_02\weights\best.pt")
 # 取得類別名稱對應表
 class_names = model.names
 
@@ -20,7 +20,7 @@ def pill_recognition_main(image):
         "name": "undefined",
         "type": "",
         "qty": 0,
-        "value": []
+        "ai_value": []
     })
 
     # 使用模型進行預測
@@ -44,7 +44,7 @@ def pill_recognition_main(image):
 
             # 整理座標
             coord_dict = {
-                "conf": round(conf, 2),
+                "conf": str(round(conf, 2)),
                 "coord": points_string
             }
 
@@ -54,7 +54,7 @@ def pill_recognition_main(image):
 
             # 增加該類別的數量與詳細數據
             data_group[class_name]["qty"] = str(int(data_group[class_name]["qty"]) + 1)
-            data_group[class_name]["value"].append(coord_dict)
+            data_group[class_name]["ai_value"].append(coord_dict)
 
     # 將結果轉換為列表結構
     output_dict = list(data_group.values())

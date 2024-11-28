@@ -9,7 +9,7 @@ prefix = "data:image/jpeg;base64,"
 @app.route('/Pill_recognition', methods=['POST'])
 def main():
     try:
-        data = request.json['valueAry'][0]
+        data = request.json['Data'][0]['base64']
         image = base64_decoder(data[len(prefix):])
         result, exe_time = pill_recognition_main(image)
 
