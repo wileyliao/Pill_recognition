@@ -2,6 +2,7 @@ import base64
 import cv2
 import numpy as np
 
+
 def base64_decoder(image_64):
     decode = base64.b64decode(image_64)
     image_array = np.frombuffer(decode, np.uint8)
