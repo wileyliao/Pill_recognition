@@ -8,7 +8,7 @@ from datetime import datetime
 import threading
 import cv2
 import os
-
+from flask_cors import CORS
 
 with open("config.json", "r", encoding="utf-8") as file:
     config_file = json.load(file)
@@ -23,6 +23,7 @@ def save_image(time, image, subdir):
 
 
 app = Flask(__name__)
+CORS(app)
 
 prefix = "data:image/jpeg;base64,"
 
