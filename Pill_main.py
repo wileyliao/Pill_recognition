@@ -1,7 +1,6 @@
 import cv2
 import json
 import time
-from ultralytics import YOLO
 from collections import defaultdict
 
 
