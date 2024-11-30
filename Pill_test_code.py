@@ -13,7 +13,8 @@ with open("config.json", "r", encoding="utf-8") as file:
     config_file = json.load(file)
 
 # 設定要傳送的 API URL
-url = config_file.get("test_url")  # 替換為您的 API URL
+post_url = config_file.get("local_post_url")  # 替換為您的 API URL
+get_url = config_file.get("local_get_url")
 
 # 編碼圖片並建立請求資料格式
 image_path = config_file.get("test_image")
@@ -34,7 +35,8 @@ headers = {
 }
 
 # 發送 POST 請求並等待回傳結果
-response = requests.post(url, headers=headers, data=json.dumps(payload))
+# response = requests.post(post_url, headers=headers, data=json.dumps(payload))
+response = requests.get(get_url)
 
 # 檢查回傳結果
 if response.status_code == 200:

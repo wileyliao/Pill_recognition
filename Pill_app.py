@@ -66,5 +66,15 @@ def main():
         return jsonify(error_response), -200
 
 
+@app.route('/Pill_recognition/test', methods=['GET'])
+def test_communication():
+
+    response_data = {
+        'Message': '數粒辨識 Communication Successful',
+        'Code': 200,
+        'Timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    return jsonify(response_data), 200
+
 if __name__ == "__main__":
     app.run(port=3050, debug=True)
